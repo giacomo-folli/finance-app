@@ -1,8 +1,10 @@
 "use client";
 
 import React from "react";
-import { NewAccountSheet } from "@/features/accounts/components/NewAccountSheet";
 import { useMountedState } from "react-use";
+
+import { NewAccountSheet } from "@/features/accounts/components/NewAccountSheet";
+import { EditAccountSheet } from "@/features/accounts/components/EditAccountSheet";
 
 export const SheetProvider = () => {
   const isMounted = useMountedState();
@@ -11,6 +13,7 @@ export const SheetProvider = () => {
 
   return (
     <>
+      <EditAccountSheet />
       <NewAccountSheet />
     </>
   );

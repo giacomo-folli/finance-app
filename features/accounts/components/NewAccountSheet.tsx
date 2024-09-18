@@ -6,6 +6,7 @@ import {
   SheetTitle,
   SheetHeader,
 } from "@/components/ui/sheet";
+import { useCreateAccount } from "../api/useCreateAccount";
 import { useNewAccount } from "../hooks/useNewAccount";
 import { AccountForm } from "./AccountForm";
 import { insertAccountSchema } from "@/db/schema";
@@ -20,8 +21,14 @@ type FormValues = z.input<typeof formSchema>;
 export const NewAccountSheet = () => {
   const { isOpen, onClose } = useNewAccount();
 
+  const mutation = useCreateAccount();
+
   const onSubmit = (values: FormValues) => {
-    console.log(values);
+    mutation.mutate(values, {
+      onSuccess: () => {
+        onClose();
+      },
+    });
   };
 
   return (
@@ -35,7 +42,7 @@ export const NewAccountSheet = () => {
         </SheetHeader>
         <AccountForm
           onSubmit={onSubmit}
-          disabled={false}
+          disabled={mutation.isPending}
           defaultValues={{
             name: "",
           }}
