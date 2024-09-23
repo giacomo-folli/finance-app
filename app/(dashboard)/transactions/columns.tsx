@@ -12,8 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnDef } from "@tanstack/react-table";
-import { AccountColumn } from "./accountColumn";
-import { CategoryColumn } from "./categoryColumn";
+import { AccountColumn } from "./AccountColumn";
+import { CategoryColumn } from "./CategoryColumn";
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
