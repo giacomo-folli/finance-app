@@ -13,10 +13,13 @@ import {
   FormControl,
   FormField,
 } from "@/components/ui/form";
+import { convertAmountToMilliunits } from "@/lib/utils";
 import { insertTransactionSchema } from "@/db/schema";
+
 import { Select } from "@/components/Select";
 import { DatePicker } from "@/components/DatePicker";
 import { Textarea } from "@/components/ui/textarea";
+import { AmountInput } from "@/components/AmountInput";
 
 const formSchema = z.object({
   date: z.coerce.date(),
@@ -62,8 +65,13 @@ export const TransactionForm = ({
   });
 
   const handleSubmit = (values: FormValues) => {
-    console.log({ values });
-    // onSubmit(values);
+    const amount = parseFloat(values.amount);
+    const amountInMilliunits = convertAmountToMilliunits(amount);
+
+    onSubmit({
+      ...values,
+      amount: amountInMilliunits,
+    });
   };
 
   const handleDelete = () => {
@@ -167,20 +175,19 @@ export const TransactionForm = ({
           control={form.control}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>Amount</FormLabel>
               <FormControl>
-                <Textarea
+                <AmountInput
                   {...field}
-                  value={field.value ?? ""}
                   disabled={disabled}
-                  placeholder="optional notes"
+                  placeholder="0.00"
                 />
               </FormControl>
             </FormItem>
           )}
         />
         <Button className="w-full" disabled={disabled}>
-          {id ? "Save chanes" : "Create account"}
+          {id ? "Save changes" : "Create transaction"}
         </Button>
         {!!id && (
           <Button
@@ -191,7 +198,7 @@ export const TransactionForm = ({
             onClick={handleDelete}
           >
             <Trash className="size-4 mr-2" />
-            Delete account
+            Delete transaction
           </Button>
         )}
       </form>

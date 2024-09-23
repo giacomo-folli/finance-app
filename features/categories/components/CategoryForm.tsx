@@ -71,7 +71,7 @@ export const CategoryForm = ({
           name="name"
         />
         <Button className="w-full" disabled={disabled}>
-          {id ? "Save chanes" : "Create category"}
+          {id ? "Save changes" : "Create category"}
         </Button>
         {!!id && (
           <Button
