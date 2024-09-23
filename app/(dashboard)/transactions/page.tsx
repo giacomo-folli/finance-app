@@ -1,6 +1,8 @@
 "use client";
 
-import { DataTable } from "@/components/DataTable";
+import { useState } from "react";
+
+import { transactions as transactionsSchema } from "@/db/schema";
 
 import { useNewTransaction } from "@/features/transactions/hooks/useNewTransaction";
 import { useBulkDeleteTransactions } from "@/features/transactions/api/useBulkDeleteTransactions";
@@ -11,11 +13,13 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useState } from "react";
-
+import { DataTable } from "@/components/DataTable";
 import { columns } from "./columns";
 import { UploadButton } from "./UploadButton";
 import { ImportCard } from "./ImportCard";
+import { useSelectAccount } from "@/features/accounts/hooks/useSelectAccount";
+import { toast } from "sonner";
+import { useBulkCreateTransactions } from "@/features/transactions/api/useBulkCreateTransactions";
 
 enum VARIANTS {
   LIST = "LIST",
@@ -29,6 +33,7 @@ const INITIAL_IMPORT_RESULTS = {
 };
 
 const TransactionsPage = () => {
+  const [AccountDialog, confirm] = useSelectAccount();
   const [variant, setVariant] = useState<VARIANTS>(VARIANTS.LIST);
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
@@ -44,12 +49,32 @@ const TransactionsPage = () => {
   };
 
   const newTransaction = useNewTransaction();
+  const createTransactions = useBulkCreateTransactions();
   const deleteTransactions = useBulkDeleteTransactions();
   const transactionsQuery = useGetTransactions();
   const transactions = transactionsQuery.data || [];
 
   const isDisabled =
     transactionsQuery.isLoading || deleteTransactions.isPending;
+
+  const onSubmitImport = async (
+    values: (typeof transactionsSchema.$inferInsert)[]
+  ) => {
+    const accountId = await confirm();
+
+    if (!accountId) return toast.error("Please select an account to continue");
+
+    const data = values.map((value) => ({
+      ...value,
+      accountId: accountId as string,
+    }));
+
+    createTransactions.mutate(data, {
+      onSuccess: () => {
+        onCancelImport();
+      },
+    });
+  };
 
   if (transactionsQuery.isLoading) {
     return (
@@ -70,11 +95,14 @@ const TransactionsPage = () => {
 
   if (variant === VARIANTS.IMPORT) {
     return (
-      <ImportCard
-        data={importResults.data}
-        onCancel={onCancelImport}
-        onSubmit={() => {}}
-      />
+      <>
+        <AccountDialog />
+        <ImportCard
+          data={importResults.data}
+          onCancel={onCancelImport}
+          onSubmit={onSubmitImport}
+        />
+      </>
     );
   }
 
@@ -86,7 +114,11 @@ const TransactionsPage = () => {
             Transaction History
           </CardTitle>
           <div className="flex flex-col lg:flex-row gap-y-2 items-center gap-x-2">
-            <Button onClick={newTransaction.onOpen} size="sm" className="w-full lg:w-auto">
+            <Button
+              onClick={newTransaction.onOpen}
+              size="sm"
+              className="w-full lg:w-auto"
+            >
               <Plus className="size-4" />
               Add New
             </Button>

@@ -81,13 +81,13 @@ export const ImportCard = ({ data, onCancel, onSubmit }: Props) => {
       }, {});
     });
 
-    const formattedDate = arrayOfData.map((item) => ({
+    const formattedData = arrayOfData.map((item) => ({
       ...item,
       amount: convertAmountToMilliunits(parseFloat(item.amount)),
       date: format(parse(item.date, dateFormat, new Date()), outputFormat),
     }));
 
-    onSubmit(formattedDate);
+    onSubmit(formattedData);
   };
 
   return (
