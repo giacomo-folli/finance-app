@@ -6,7 +6,7 @@ import { ClerkLoaded, ClerkLoading, UserButton } from "@clerk/nextjs";
 import { Filters } from "./Filters";
 import { Navigation } from "./Navigation";
 import { HeaderLogo } from "./HeaderLogo";
-import { WelcomeMsg } from "./WelcomeMsg";
+// import { WelcomeMsg } from "./WelcomeMsg";
 
 export const Header = () => {
   return (

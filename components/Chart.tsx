@@ -4,7 +4,6 @@ import {
   AreaChart,
   BarChart3,
   FileSearch,
-  FileSearch2Icon,
   LineChart,
   Loader2,
 } from "lucide-react";

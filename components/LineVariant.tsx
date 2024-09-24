@@ -2,10 +2,6 @@ import React from "react";
 import { format } from "date-fns";
 
 import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
   CartesianGrid,
   Line,
   LineChart,
@@ -37,8 +33,20 @@ export const LineVariant = ({ data }: Props) => {
           tickMargin={16}
         />
         <Tooltip content={<CustomTooltip />} />
-        <Line dot={false} dataKey="income" strokeWidth={2} stroke="#3d82f6" className="drop-shadow-sm" />
-        <Line dot={false} dataKey="expenses" strokeWidth={2} stroke="#f43f5e" className="drop-shadow-sm" />
+        <Line
+          dot={false}
+          dataKey="income"
+          strokeWidth={2}
+          stroke="#3d82f6"
+          className="drop-shadow-sm"
+        />
+        <Line
+          dot={false}
+          dataKey="expenses"
+          strokeWidth={2}
+          stroke="#f43f5e"
+          className="drop-shadow-sm"
+        />
       </LineChart>
     </ResponsiveContainer>
   );
