@@ -6,14 +6,17 @@ import { InferResponseType } from "hono";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
-import { Actions } from "./actions";
 import { ArrowUpDown } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+
 import { ColumnDef } from "@tanstack/react-table";
-import { AccountColumn } from "@/app/(dashboard)/transactions/AccountColumn";
-import { CategoryColumn } from "@/app/(dashboard)/transactions/CategoryColumn";
+
+import { Actions } from "./actions";
+import { CategoryColumn } from "./CategoryColumn";
+import { AccountColumn } from "./AccountColumn";
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
